@@ -6,7 +6,8 @@ warnings.filterwarnings('ignore')
 llm = LLM(
     model="openrouter/openai/gpt-3.5-turbo-16k",
     base_url="https://openrouter.ai/api/v1",
-    api_key='sk-or-v1-*****'
+    api_key='sk-or-v1-*****',
+    max_tokens=2000,
 )
 planner = Agent(
     role="Content Planner",
