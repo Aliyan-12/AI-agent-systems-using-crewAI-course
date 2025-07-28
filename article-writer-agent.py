@@ -60,6 +60,19 @@ editor = Agent(
     llm=llm,
     verbose=True
 )
+verifier = Agent(
+    role="Verifier",
+    goal="Verify a given blog post to be humanized "
+         "the writing style should humanize the blog post on topic: {topic}. ",
+    backstory="You are a verifier who verifies a blog post "
+              "from the Content Editor. "
+              "Your goal is to review the blog post "
+              "to ensure elimination of AI content detection,"
+              "It should not be detected by AI detection tools ",
+    allow_delegation=False,
+    llm=llm,
+    verbose=True
+)
 
 plan = Task(
     description=(
@@ -102,10 +115,17 @@ edit = Task(
                     "each section should have 2 or 3 paragraphs.",
     agent=editor
 )
+verify = Task(
+    description=("Humanize the given blog post content "
+                 "to make it AI free content "),
+    expected_output="A verified and humanized blog post in article format, "
+                    "ready for publication, ",
+    agent=verifier
+)
 
 crew = Crew(
-    agents=[planner, writer, editor],
-    tasks=[plan, write, edit],
+    agents=[planner, writer, editor, verifier],
+    tasks=[plan, write, edit, verify],
     # verbose=True
 )
 
